@@ -42,7 +42,7 @@
       item loc prof)))
 
 (defn get-bytes [^String string]
-  (.getBytes string))
+  (.getBytes string "utf-8"))
 
 (defn search-dict-item-lite
   ([dic word page-size page-index] (search-dict-item-lite dic word :headword :exact :and "XHTML" page-size page-index))
@@ -72,5 +72,10 @@
   (loop []
     (print "> ")
     (flush)
-    (println (ejdict (str (read))))
+    (let [input (str (read))
+          response (ejdict input)]
+      (println input)
+      (println (apply str
+                      (replace {\tab \newline}
+                               (second response)))))
     (recur)))
